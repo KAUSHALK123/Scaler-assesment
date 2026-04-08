@@ -1,4 +1,3 @@
-@"
 # Python
 __pycache__/
 *.py[cod]
@@ -6,9 +5,17 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-env/
+
+# Virtual environments
+.venv/
 venv/
 sql_venv/
+
+# Keep application package named env tracked
+!env/
+!env/**
+
+# Local secrets
 .env
 .env.local
 
@@ -19,12 +26,3 @@ sql_venv/
 # OS
 .DS_Store
 Thumbs.db
-"@ | Out-File -Encoding UTF8 .gitignore
-
-# Create .gitattributes
-@"
-* text=auto
-*.py text eol=lf
-*.sh text eol=lf
-Dockerfile text eol=lf
-"@ | Out-File -Encoding UTF8 .gitattributes
