@@ -4,6 +4,9 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
+# Set Python path to include current directory
+ENV PYTHONPATH=/app:$PYTHONPATH
+
 # Install system dependencies (minimal)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
@@ -23,5 +26,5 @@ USER appuser
 # HF Spaces runs on port 7860
 EXPOSE 7860
 
-# Start FastAPI server with more workers and longer startup
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860", "--workers", "1"]
+# Start FastAPI server with python -m to ensure proper module loading
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
