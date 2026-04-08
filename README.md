@@ -1,3 +1,13 @@
+---
+title: SQL Debug & Optimize Environment
+emoji: 🔍
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_file: main.py
+pinned: false
+---
+
 # SQL Debug & Optimize Environment
 
 An OpenEnv-compliant AI agent training environment where agents learn to
