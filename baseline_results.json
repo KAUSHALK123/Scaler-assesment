@@ -1,0 +1,26 @@
+{
+  "model": "Qwen/Qwen2.5-Coder-32B-Instruct:nscale",
+  "endpoint": "https://router.huggingface.co/v1",
+  "results": [
+    {
+      "task_id": "task_easy",
+      "best_score": 1.0,
+      "attempts": 1,
+      "solved": true
+    },
+    {
+      "task_id": "task_medium",
+      "best_score": 0.74,
+      "attempts": 5,
+      "solved": false
+    },
+    {
+      "task_id": "task_hard",
+      "best_score": 1.0,
+      "attempts": 1,
+      "solved": true
+    }
+  ],
+  "average_score": 0.9133333333333334,
+  "total_time_seconds": 45.24
+}

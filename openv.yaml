@@ -1,0 +1,60 @@
+# openenv.yaml
+name: sql-debug-env
+version: "1.0.0"
+description: >
+  An OpenEnv-compliant environment where AI agents learn to debug
+  and optimize SQL queries across three difficulty levels.
+tags:
+  - openenv
+  - sql
+  - debugging
+  - optimization
+  - code
+author: Ashwin
+license: MIT
+
+environment:
+  type: text
+  max_steps: 10
+
+tasks:
+  - id: task_easy
+    difficulty: easy
+    description: Fix syntax errors in a broken SQL query
+  - id: task_medium
+    difficulty: medium
+    description: Fix logic errors in a query that runs but returns wrong results
+  - id: task_hard
+    difficulty: hard
+    description: Rewrite an inefficient correlated subquery using JOIN and GROUP BY
+
+action_space:
+  type: text
+  description: A single SQL SELECT statement submitted as a string
+
+observation_space:
+  type: object
+  fields:
+    - task_id: string
+    - step: integer
+    - schema_description: string
+    - broken_query: string
+    - last_action: string
+    - last_result: string
+    - last_error: string
+    - hint: string
+    - done: boolean
+
+reward:
+  min: 0.0
+  max: 1.0
+  type: dense
+  description: >
+    Partial credit across 4 checkpoints — syntax (0.25),
+    schema match (0.25), row count (0.25), exact match (0.25).
+    Step penalty of 0.01 per step applied on incorrect attempts.
+
+endpoints:
+  reset: POST /reset
+  step: POST /step
+  state: GET /state
