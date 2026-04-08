@@ -87,13 +87,16 @@ def health():
 # ─────────────────────────────────────────────
 
 @app.post("/reset", response_model=Observation)
-def reset(request: ResetRequest):
+def reset(request: Optional[ResetRequest] = None):
     """
     Reset the environment and start a new episode.
-    Pass task_id: 'task_easy' | 'task_medium' | 'task_hard'
+    Accepts optional JSON body with task_id:
+    'task_easy' | 'task_medium' | 'task_hard'.
+    If body is omitted, defaults to 'task_easy'.
     """
     try:
-        obs = env.reset(task_id=request.task_id)
+        task_id = request.task_id if request is not None else "task_easy"
+        obs = env.reset(task_id=task_id)
         return obs
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
