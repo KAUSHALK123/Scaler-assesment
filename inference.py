@@ -35,6 +35,22 @@ MAX_STEPS    = 5   # max attempts per task in inference
 TASKS = ["task_easy", "task_medium", "task_hard"]
 
 
+def _log_start(task_id: str) -> None:
+    print(f"[START] task={task_id}", flush=True)
+
+
+def _log_step(task_id: str, step: int, reward: float, done: bool) -> None:
+    done_flag = "true" if done else "false"
+    print(
+        f"[STEP] task={task_id} step={step} reward={reward:.4f} done={done_flag}",
+        flush=True,
+    )
+
+
+def _log_end(task_id: str, score: float, steps: int) -> None:
+    print(f"[END] task={task_id} score={score:.4f} steps={steps}", flush=True)
+
+
 # ─────────────────────────────────────────────
 # OPENAI CLIENT — pointed at HF Inference API
 # ─────────────────────────────────────────────
@@ -121,6 +137,7 @@ Task Description is to fix the query so it works correctly and efficiently.
 
 def run_task(task_id: str) -> dict:
     """Run one full episode for a task. Returns result summary."""
+    _log_start(task_id)
     print(f"\n{'='*50}")
     print(f"  TASK: {task_id.upper()}")
     print(f"{'='*50}")
@@ -166,6 +183,7 @@ def run_task(task_id: str) -> dict:
 
         print(f"  Score: {reward:.4f} | {message}")
         print(f"  Breakdown: {breakdown}")
+        _log_step(task_id=task_id, step=attempt, reward=reward, done=done)
 
         best_score = max(best_score, reward)
         observation = result["observation"]
@@ -180,12 +198,14 @@ def run_task(task_id: str) -> dict:
 
         time.sleep(0.5)  # be kind to the API
 
-    return {
+    summary = {
         "task_id": task_id,
         "best_score": best_score,
         "attempts": attempt,
         "solved": best_score == 1.0,
     }
+    _log_end(task_id=task_id, score=best_score, steps=attempt)
+    return summary
 
 
 def _clean_sql(text: str) -> str:
